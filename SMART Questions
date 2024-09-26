@@ -1,2 +1,17 @@
 The SMART Questions:
 
+What is the racial breakdown of volunteers? (Bar chart where x= race and y = # of participants)
+Are there any racial groups that are more likely to volunteer?
+More likely to volunteer in a specific region/state?
+In a specific program office?
+
+This data is meant to capture how representative the volunteer population is of the the population they serve. In this data set, they use odds ratio at a 95% confidence level and they're looking for an odds ratio of 1 with a very narrow confidence interval, ideally. 
+
+I also started subsetting the data to see what we have... 
+Start with 26472 obs.
+Sub_race = 15436 obs.
+sub_2022 = 7704
+
+Some of the obs are missing som e values, like state, so we can probably get the set even lower, or we can focus on just service region, or program office etc and stay with the 7704 values.
+
+--Rachel
