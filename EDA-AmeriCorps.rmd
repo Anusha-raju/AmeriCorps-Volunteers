@@ -1,0 +1,86 @@
+---
+title: "Exploratory Data Analysis (EDA) - AmeriCorps"
+author: "GWU Intro to Data Science -- DATS 6101 Group8"
+# date: "today"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: show
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+```{r init, include=F}
+# The package "ezids" (EZ Intro to Data Science) includes a lot of the helper functions we developed for the course. 
+# Some of the frequently used functions are loadPkg(), xkabledply(), xkablesummary(), uzscale(), etc.
+# Once installed, load the library.
+library(ezids)
+```
+
+
+```{r setup, include=FALSE}
+# some of common options (and the defaults) are: 
+# include=T, eval=T, echo=T, results='hide'/'asis'/'markup',..., collapse=F, warning=T, message=T, error=T, cache=T, fig.width=6, fig.height=4, fig.dim=c(6,4) #inches, fig.align='left'/'center','right', 
+knitr::opts_chunk$set(warning = F, results = "markup", message = F)
+options(scientific=T, digits = 3) 
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+
+```{r}
+americorps <- read.csv("/home/anusha/workspace/Data science/AmeriCorps-Volunteers/AmeriCorps_Participant_Demographics_Data.csv", header =TRUE)
+```
+
+
+```{r}
+dem_cat_subset <- 'Race'
+amco <- americorps %>%
+  filter(dem_cat == dem_cat_subset)
+
+time_period_subset <- '2022'
+amco <- amco %>%
+  filter(time_period == time_period_subset)
+
+amco <- amco %>%
+  filter(!program_office %in% c("All AmeriCorps Members", "AmeriCorps Member Programs (no NCCC)", "AmeriCorps Seniors (All)"))
+
+amco <- amco %>%
+  filter(!dem_group %in% c("Racially Diverse (Non-White)"))
+```
+
+```{r}
+amco$geography<-as.factor(amco$geography)
+amco$dem_cat<-as.factor(amco$dem_cat)
+amco$dem_group<-as.factor(amco$dem_group)
+amco$program_office<-as.factor(amco$program_office)
+amco$service_region<-as.factor(amco$service_region)
+amco$state<-as.factor(amco$state)
+amco$time_period<-as.factor(amco$time_period)
+```
+
+**1. Which program offices are most effective in engaging a diverse range of participants?**
+```{r}
+```
+
+**2. How does the representation of different demographic groups compare to their proportions in the general population?**
+```{r}
+```
+**3. Which groups are overrepresented or underrepresented in AmeriCorps?**
+    ```{r}
+```
+**4. How do participation rates compare between different programs within the same service region?**
+```{r}
+```
+**5. What is the racial composition of the volunteers?**
+```{r}
+```
+**6.Are some racial groups more engaged in volunteer activities within specific states or program offices?**
+```{r}
+```
