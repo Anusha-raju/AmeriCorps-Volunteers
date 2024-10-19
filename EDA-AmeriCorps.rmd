@@ -80,6 +80,51 @@ amco$time_period<-as.factor(amco$time_period)
 ```
 **5. What is the racial composition of the volunteers?**
 ```{r}
+#I think in this first chunk, need to replace amco_r2022_noNW with amco because that's how it's subsetted at the beginning? Also think this question should go to #1. I reordered the question on the ppt as well so they make more sense (ie go from least to most specific)
+national <- amco_r2022_noNW %>%
+  filter(geography == "National")
+print(national)
+
+program_MSY_national <- national %>%
+  group_by(program_office) %>%
+  summarise (total_dem_group = sum(count_dem_group))
+print(program_MSY_national)
+
+race_program_national <- aggregate(count_dem_group ~ program_office + dem_group, data = national, sum)
+print(race_program_national)
+
+group_MSY_national <- aggregate(count_dem_group ~ dem_group, data = national, sum)
+total_MSY_national <- sum(group_MSY_national$count_dem_group)
+group_MSY_national$percentage <- (group_MSY_national$count_dem_group / total_MSY_national) * 100
+print(group_MSY_national)
+
+#total MSY bar chart
+ggplot(group_MSY_national, aes(x = dem_group, y = count_dem_group, fill = dem_group)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  labs(title = "AmeriCorps Participation of Race by Member Service Years (MSY)", x = "Race", y = "MSY") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") + 
+  geom_text(aes(label = count_dem_group), vjust = 0, size = 3.5) +
+  theme(axis.text.x = element_blank()) +
+  theme(plot.title = element_text(size = 20, face = "bold", hjust = 0),
+        axis.title = element_text(size = 16, face = "bold"),
+        axis.text.x = element_blank(),
+        axix.text.y = element_text(size = 10))
+
+#bar chart w %MSY
+ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  labs(title = "Race Distribution by Percentage of Member Service Years (MSY)", x = "Race", y = "MSY(%)") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") + 
+  geom_text(aes(label = round(percentage, 1)), vjust = 0, size = 3) +
+  theme(axis.text.x = element_blank()) +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 12, face = "bold", hjust = 0),
+        axis.title = element_text(size = 10, face = "bold"),
+        axis.text.x = element_text(size = 6, angle = 90, vjust = -3),
+        axix.text.y = element_text(size = 10))+
+  scale_y_continuous(breaks = seq(0, 100, by = 15))
 ```
 **6.Are some racial groups more engaged in volunteer activities within specific states or program offices?**
 ```{r}
