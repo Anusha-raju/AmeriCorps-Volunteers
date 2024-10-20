@@ -1,0 +1,234 @@
+---
+title: 'Proj'
+author: "Your Name"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: show
+    number_sections: false
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: '3'
+---
+
+```{r init, include=F}
+# The package "ezids" (EZ Intro to Data Science) includes some helper functions we developed for the course. 
+# Some of the frequently used functions are loadPkg(), xkabledply(), xkablesummary(), uzscale(), etc.
+# You will need to install it (once) from GitHub.
+# library(devtools)
+# devtools::install_github("physicsland/ezids")
+# Then load the package in your R session.
+library(ezids)
+library(dplyr)
+```
+
+
+```{r setup, include=FALSE}
+# Some of common RMD options (and the defaults) are: 
+# include=T, eval=T, echo=T, results='hide'/'asis'/'markup',..., collapse=F, warning=T, message=T, error=T, cache=T, fig.width=6, fig.height=4, fig.dim=c(6,4) #inches, fig.align='left'/'center','right', 
+knitr::opts_chunk$set(results="markup", warning = F, message = F)
+options(scientific=T, digits = 3) 
+```
+
+
+```{r}
+
+
+data<-read.csv("/Users/sayanpatra/Downloads/AmeriCorps_Participant_Demographics_Data.csv")
+# Check for missing values in the dataset
+sapply(data, function(x) sum(is.na(x)))
+
+# Option 1: Remove rows with missing values in critical columns
+data_clean <- data %>%
+  filter(!is.na(count_dem_group) & !is.na(census_pop_group) & !is.na(time_period))
+
+# Option 2: Impute missing values (example for count_dem_group, using median)
+data_clean <- data %>%
+  mutate(count_dem_group = ifelse(is.na(count_dem_group), 
+                                  median(count_dem_group, na.rm = TRUE), 
+                                  count_dem_group))
+
+# Remove duplicate rows if any
+data_clean <- data_clean %>%
+  distinct()
+# Convert columns to appropriate data types
+data_clean <- data_clean %>%
+  mutate(count_dem_group = as.numeric(count_dem_group),
+         census_pop_group = as.numeric(census_pop_group),
+         odds_ratio_estimate = as.numeric(odds_ratio_estimate),
+         time_period = as.factor(time_period),
+         state = as.factor(state),
+         dem_group = as.factor(dem_group),
+         service_region = as.factor(service_region))
+# Ensure consistent capitalization and remove whitespace
+data_clean <- data_clean %>%
+  mutate(state = trimws(tolower(state)),
+         dem_group = trimws(tolower(dem_group)),
+         service_region = trimws(tolower(service_region)))
+# Filter out rows with zero or negative values in critical columns
+data_clean <- data_clean %>%
+  filter(count_dem_group > 0, census_pop_group > 0)
+# Filter out rows with zero or negative values in critical columns
+data_clean <- data_clean %>%
+  filter(count_dem_group > 0, census_pop_group > 0)
+# Check the time_period values
+unique(data_clean$time_period)
+
+# If needed, create a consistent time format (e.g., converting ranges to single years or midpoint)
+# Here's an example of converting "2020-2022" to the midpoint year (2021):
+data_clean <- data_clean %>%
+  mutate(time_period = ifelse(grepl("-", time_period), 
+                              as.numeric(substr(time_period, 1, 4)) + 1, 
+                              as.numeric(time_period)))
+
+
+library(dplyr)
+library(ggplot2)
+library(viridis)
+```
+#1. Time Trends in Participation:
+#Business Question: How have participation trends changed over time for different demographic groups within AmeriCorps?
+
+```{r}
+
+library(dplyr)
+library(ggplot2)
+
+# Group by time period and demographic group, summing the total count of participants
+time_trend <- data %>%
+  group_by(time_period, dem_group) %>%
+  summarise(count_dem_group = sum(count_dem_group, na.rm = TRUE))
+
+# Plot the trends for each demographic group over time
+ggplot(time_trend, aes(x = time_period, y = count_dem_group, color = dem_group, group = dem_group)) +
+  geom_line() +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Demographic Participation Trends Over Time", 
+       y = "Total Participants", x = "Time Period")
+#Expected Outcome: This will show line plots for each demographic group, allowing you to identify how participation trends for each group have evolved over time.
+```
+
+#2. Census Population vs. Program Participation:
+#Business Question: How does the program’s participant demographic count compare with the census population for each state?
+```{r}
+# Group by state and demographic group
+census_vs_participation <- data %>%
+  group_by(state, dem_group) %>%
+  summarise(count_dem_group = sum(count_dem_group, na.rm = TRUE),
+            census_pop_group = sum(census_pop_group, na.rm = TRUE)) %>%
+  mutate(participation_rate = count_dem_group / census_pop_group)
+
+# Assuming 'count_dem_group' is the observed count of program participants
+# and 'census_pop_group' is the expected count from the census population.
+
+# Example for one state
+state_data <- data %>% filter(state == "California")  # Filter data for a specific state
+
+# Perform the chi-square test
+chisq_test <- chisq.test(state_data$count_dem_group, p = state_data$census_pop_group / sum(state_data$census_pop_group))
+
+# Print the test results
+chisq_test
+
+library(ggplot2)
+
+
+
+# Plot the comparison between census population and program participation
+ggplot(census_vs_participation, aes(x = state, y = participation_rate, fill = dem_group)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Participation Rate vs Census Population by State", 
+       y = "Participation Rate (Program Participants / Census Population)",
+       x = "State")
+
+ggplot(census_vs_participation, aes(x = state, y = participation_rate, color = dem_group)) +
+  geom_point(size = 3, position = position_jitter(width = 0.2, height = 0)) +  # Scatter plot with jitter for clarity
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "Participation Rate vs Census Population by State",
+       y = "Participation Rate (Program Participants / Census Population)",
+       x = "State")
+
+ggplot(census_vs_participation, aes(sample = participation_rate)) +
+  stat_qq() +  # Q-Q plot comparing to normal distribution
+  stat_qq_line() +  # Add the normal reference line
+  facet_wrap(~ dem_group) +  # Create separate Q-Q plots for each demographic group
+  labs(title = "Q-Q Plot of Participation Rates by Demographic Group (Normal Distribution)",
+       x = "Theoretical Quantiles (Normal Distribution)", 
+       y = "Sample Quantiles (Participation Rate)") +
+  theme_minimal()
+
+# Create Q-Q plot using qqnorm
+qqnorm(census_vs_participation$participation_rate, 
+       main = "Q-Q Plot of Participation Rates by Demographic Group (Normal Distribution)",
+       xlab = "Theoretical Quantiles (Normal Distribution)", 
+       ylab = "Sample Quantiles (Participation Rate)")
+qqline(census_vs_participation$participation_rate, col = "blue", lwd = 2)
+
+abline(0, 1, col = "red", lty = 2)  # 45-degree line (slope = 1, intercept = 0)
+#Expected Outcome: The bar chart will allow you to compare how well AmeriCorps is reaching each demographic group relative to the state's census population. You can identify where participation is higher or lower than expected.
+```
+
+
+
+#3. Comparative Participation Rates Between Service Regions:
+#Business Question: How do participation rates of different demographic groups compare across service regions?
+```{r}
+
+
+# Group by service region and demographic group, summing the total count of participants
+
+region_representation <- data %>%
+  group_by(service_region, dem_group) %>%
+  summarise(count_dem_group = sum(count_dem_group, na.rm = TRUE))
+
+# Plot the representation by service region
+
+
+ggplot(region_representation, aes(x = service_region, y = count_dem_group, fill = dem_group)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Comparative Participation Rates by Service Region", 
+       y = "Total Participants", x = "Service Region")
+
+ggplot(census_vs_participation, aes(sample = participation_rate)) +
+  stat_qq() +  # Q-Q plot comparing participation rates to a normal distribution
+  stat_qq_line() +  # Add the 45-degree line of normality
+  facet_wrap(~ dem_group) +  # Create separate Q-Q plots for each demographic group
+  labs(title = "Q-Q Plot of Participation Rates by Demographic Group (Normal Distribution)",
+       x = "Theoretical Quantiles (Normal Distribution)", 
+       y = "Sample Quantiles (Participation Rate)") +
+  theme_minimal()
+#Expected Outcome: This bar chart will show the participation rates of different demographic groups across service regions, helping you compare which regions are more successful at engaging specific groups.
+```
+
+#4. Differences in the Success of Regions in Engaging Volunteers:
+#Business Question: Are there differences in the success of certain regions in engaging volunteers?
+
+```{r}
+
+
+
+# Group by service region and summarize the total participant count across all demographic groups
+
+region_success <- data %>%
+group_by(service_region) %>%
+summarise(total_participants = sum(count_dem_group, na.rm = TRUE))
+
+# Plot the total number of participants per service region
+
+ggplot(region_success, aes(x = service_region, y = total_participants, fill = service_region)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Success of Service Regions in Engaging Volunteers", 
+       y = "Total Participants", x = "Service Region")
+#Expected Outcome: The bar chart will show the total number of participants in each service region, allowing you to assess which regions are more successful at engaging volunteers overall.
+
+
+```
+
+
+
+
