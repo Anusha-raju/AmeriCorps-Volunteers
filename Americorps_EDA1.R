@@ -277,3 +277,5 @@ race_breakdown <- amco_race_2022 %>%
   group_by(program_office, dem_group) %>%
   summarise(count = n()) %>%
   arrange(program_office, dem_group)
+
+unique(amco$time_period)
