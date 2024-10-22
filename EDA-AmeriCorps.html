@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="GWU Intro to Data Science – DATS 6101 Group8" />
+<meta name="author" content="DATS 6101 Group8 Anusha Umashankar| Aidan Carlisle| Rachel Thomas| Sayan Patra" />
 
 <meta name="date" content="2024-10-22" />
 
@@ -1569,7 +1569,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Exploratory Data Analysis (EDA) -
 AmeriCorps</h1>
-<h4 class="author">GWU Intro to Data Science – DATS 6101 Group8</h4>
+<h4 class="author">DATS 6101 Group8 <a href="https://github.com/Anusha-raju">Anusha Umashankar</a>| <a href="https://github.com/acarlisle8">Aidan Carlisle</a>| <a href="https://github.com/releered">Rachel Thomas</a>| <a href="https://github.com/Sayanpatraa">Sayan Patra</a></h4>
 <h4 class="date">2024-10-22</h4>
 
 </div>
@@ -1577,13 +1577,14 @@ AmeriCorps</h1>
 
 <div id="introduction-on-americorps" class="section level1">
 <h1>Introduction on AmeriCorps</h1>
-<p>AmeriCorps is a national service program in the United States,
-established in 1993, that encourages individuals to serve their
-communities through various initiatives. Members engage in projects that
-address pressing social issues such as education, health, public safety,
-and environmental sustainability. In return for their service, members
-may receive benefits like education awards, living stipends, and
-professional experience.</p>
+<p><a href="https://americorps.gov/">AmeriCorps</a> is a national
+service program in the United States, established in 1993, that
+encourages individuals to serve their communities through various
+initiatives. Members engage in projects that address pressing social
+issues such as education, health, public safety, and environmental
+sustainability. In return for their service, members may receive
+benefits like education awards, living stipends, and professional
+experience.</p>
 <p>AmeriCorps Seniors is a specific branch of the AmeriCorps program
 aimed at older adults, typically aged 55 and over. It provides
 opportunities for seniors to contribute their skills and experience to
@@ -1620,7 +1621,8 @@ country.</p>
 <div id="data-source" class="section level1">
 <h1>Data Source</h1>
 <ul>
-<li>The data is collected and published by AmeriCorps.</li>
+<li>The <a href="https://catalog.data.gov/dataset/americorps-participant-demographics-data">Data</a>
+is collected and published by AmeriCorps.</li>
 <li>The dataset provides comparisons of demographic group prevalence in
 AmeriCorps Member/Volunteers populations to that of the greater U.S.
 population.</li>
@@ -1655,7 +1657,7 @@ names(americorps)</code></pre>
 ##  [9] &quot;count_total&quot;      &quot;count_dem_group&quot;  &quot;census_pop_group&quot;</code></pre>
 <ul>
 <li>The data has already been cleared of missing or NA values and is
-being convert to desired variable type.</li>
+being converted to desired variable type.</li>
 </ul>
 <p>The summary of the data:</p>
 <pre class="r"><code>americorps$geography&lt;-as.factor(americorps$geography)
@@ -1706,19 +1708,51 @@ summary(americorps)</code></pre>
 ##  3rd Qu.:2.95e+06  
 ##  Max.   :2.69e+08  
 ## </code></pre>
+</div>
+<div id="preprocessing-the-data" class="section level1">
+<h1>Preprocessing the data</h1>
+<ul>
+<li>The summary rows of the analysis, including program office
+categories such as “All AmeriCorps Members,” “AmeriCorps Member Programs
+(no NCCC),” and “AmeriCorps Seniors (All),” were also included in the
+dataset; therefore, they are removed.</li>
+</ul>
+<pre class="r"><code>americorps_subset &lt;- americorps %&gt;%
+  filter(!program_office %in% c(&quot;All AmeriCorps Members&quot;, &quot;AmeriCorps Member Programs (no NCCC)&quot;, &quot;AmeriCorps Seniors (All)&quot;))</code></pre>
+<ul>
+<li>The data also had summary rows in the Demographic Group category
+such as “Racially Diverse (Non-White)”; therefore, they are
+removed.</li>
+</ul>
+<pre class="r"><code>americorps_subset &lt;- americorps_subset %&gt;% filter(!dem_group %in% c(&quot;Racially Diverse (Non-White)&quot;))</code></pre>
+<ul>
+<li>For this analysis we are only considering the data with respect to
+“Race” demographic analysis specifically in 2022.</li>
+</ul>
 <pre class="r"><code>dem_cat_subset &lt;- &#39;Race&#39;
-amco &lt;- americorps %&gt;%
+americorps_subset &lt;- americorps_subset %&gt;%
   filter(dem_cat == dem_cat_subset)
 
 time_period_subset &lt;- &#39;2022&#39;
-amco &lt;- amco %&gt;%
-  filter(time_period == time_period_subset)
-
-amco &lt;- amco %&gt;%
-  filter(!program_office %in% c(&quot;All AmeriCorps Members&quot;, &quot;AmeriCorps Member Programs (no NCCC)&quot;, &quot;AmeriCorps Seniors (All)&quot;))
-
-amco &lt;- amco %&gt;%
-  filter(!dem_group %in% c(&quot;Racially Diverse (Non-White)&quot;))</code></pre>
+americorps_subset &lt;- americorps_subset %&gt;%
+  filter(time_period == time_period_subset)</code></pre>
+<ul>
+<li>The data is being recorded at three geographic levels (National,
+State, Region). To avoid data duplication, the data is being considered
+at one particular level at a time.</li>
+</ul>
+<pre class="r"><code>#filter by national
+americorps_national &lt;- americorps_subset %&gt;%
+  filter(geography == &quot;National&quot;)
+#filter by state
+americorps_state &lt;- americorps_subset %&gt;%
+  filter(geography == &quot;State&quot;)
+#filter by region
+americorps_region &lt;- americorps_subset %&gt;%
+  filter(geography == &quot;Region&quot;)</code></pre>
+</div>
+<div id="smart-questions" class="section level1">
+<h1>SMART Questions</h1>
 <p><strong>1. Which program offices are most effective in engaging a
 diverse range of participants?</strong></p>
 <p><strong>2. How does the representation of different demographic

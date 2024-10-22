@@ -1,6 +1,6 @@
 ---
 title: "Exploratory Data Analysis (EDA) - AmeriCorps"
-author: "GWU Intro to Data Science -- DATS 6101 Group8"
+author: "DATS 6101 Group8 [Anusha Umashankar](https://github.com/Anusha-raju)| [Aidan Carlisle](https://github.com/acarlisle8)| [Rachel Thomas](https://github.com/releered)| [Sayan Patra](https://github.com/Sayanpatraa)"
 # date: "today"
 date: "`r Sys.Date()`"
 output:
@@ -37,7 +37,7 @@ library(tidyr)
 
 # Introduction on AmeriCorps
 
-AmeriCorps is a national service program in the United States, established in 1993, that encourages individuals to serve their communities through various initiatives. Members engage in projects that address pressing social issues such as education, health, public safety, and environmental sustainability. In return for their service, members may receive benefits like education awards, living stipends, and professional experience.
+[AmeriCorps](https://americorps.gov/) is a national service program in the United States, established in 1993, that encourages individuals to serve their communities through various initiatives. Members engage in projects that address pressing social issues such as education, health, public safety, and environmental sustainability. In return for their service, members may receive benefits like education awards, living stipends, and professional experience.
 
 
 AmeriCorps Seniors is a specific branch of the AmeriCorps program aimed at older adults, typically aged 55 and over. It provides opportunities for seniors to contribute their skills and experience to community service. Programs under AmeriCorps Seniors include:
@@ -48,8 +48,6 @@ AmeriCorps Seniors is a specific branch of the AmeriCorps program aimed at older
 
 Together, AmeriCorps and AmeriCorps Seniors play a crucial role in fostering civic engagement and addressing community needs across the country.
 
-
-[AmeriCorps]: https://americorps.gov/
 
 
 There are several programs in AmeriCorps:
@@ -75,11 +73,11 @@ There are several programs in AmeriCorps:
 
 # Data Source
 
-* The data is collected and published by AmeriCorps.
+* The [Data](https://catalog.data.gov/dataset/americorps-participant-demographics-data) is collected and published by AmeriCorps.
 * The dataset provides comparisons of demographic group prevalence in AmeriCorps Member/Volunteers populations to that of the greater U.S. population. 
 * The data was initially published on October 19, 2023, and last modified on December 18, 2023.
 
-[Data]: https://catalog.data.gov/dataset/americorps-participant-demographics-data
+
 
 
 # Info on the dataset
@@ -100,7 +98,7 @@ americorps <- americorps %>%
 names(americorps)
 ```
 
-* The data has already been cleared of missing or NA values and is being convert to desired variable type.
+* The data has already been cleared of missing or NA values and is being converted to desired variable type.
 
 The summary of the data:
 ```{r}
@@ -114,22 +112,51 @@ americorps$time_period<-as.factor(americorps$time_period)
 summary(americorps)
 ```
 
+# Preprocessing the data
+
+* The summary rows of the analysis, including program office categories such as "All AmeriCorps Members," "AmeriCorps Member Programs (no NCCC)," and "AmeriCorps Seniors (All)," were also included in the dataset; therefore, they are removed.
 
 ```{r}
+americorps_subset <- americorps %>%
+  filter(!program_office %in% c("All AmeriCorps Members", "AmeriCorps Member Programs (no NCCC)", "AmeriCorps Seniors (All)"))
+```
+
+* The data also had summary rows in the Demographic Group category such as "Racially Diverse (Non-White)"; therefore, they are removed. 
+```{r}
+americorps_subset <- americorps_subset %>% filter(!dem_group %in% c("Racially Diverse (Non-White)"))
+```
+
+* For this analysis we are only considering the data with respect to "Race" demographic analysis specifically in 2022.
+```{r}
 dem_cat_subset <- 'Race'
-amco <- americorps %>%
+americorps_subset <- americorps_subset %>%
   filter(dem_cat == dem_cat_subset)
 
 time_period_subset <- '2022'
-amco <- amco %>%
+americorps_subset <- americorps_subset %>%
   filter(time_period == time_period_subset)
-
-amco <- amco %>%
-  filter(!program_office %in% c("All AmeriCorps Members", "AmeriCorps Member Programs (no NCCC)", "AmeriCorps Seniors (All)"))
-
-amco <- amco %>%
-  filter(!dem_group %in% c("Racially Diverse (Non-White)"))
 ```
+
+* The data is being recorded at three geographic levels (National, State, Region). To avoid data duplication, the data is being considered at one particular level at a time.
+
+```{r}
+#filter by national
+americorps_national <- americorps_subset %>%
+  filter(geography == "National")
+#filter by state
+americorps_state <- americorps_subset %>%
+  filter(geography == "State")
+#filter by region
+americorps_region <- americorps_subset %>%
+  filter(geography == "Region")
+
+```
+
+
+
+
+# SMART Questions
+
 
 
 **1. Which program offices are most effective in engaging a diverse range of participants?**
