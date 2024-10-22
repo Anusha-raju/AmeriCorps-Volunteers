@@ -27,15 +27,91 @@ knitr::opts_chunk$set(warning = F, results = "markup", message = F)
 options(scientific=T, digits = 3) 
 ```
 
-```{r}
+```{r include=FALSE}
 library(dplyr)
 library(ggplot2)
 library(tidyr)
 ```
 
 
+
+# Introduction on AmeriCorps
+
+AmeriCorps is a national service program in the United States, established in 1993, that encourages individuals to serve their communities through various initiatives. Members engage in projects that address pressing social issues such as education, health, public safety, and environmental sustainability. In return for their service, members may receive benefits like education awards, living stipends, and professional experience.
+
+
+AmeriCorps Seniors is a specific branch of the AmeriCorps program aimed at older adults, typically aged 55 and over. It provides opportunities for seniors to contribute their skills and experience to community service. Programs under AmeriCorps Seniors include:
+
+  * Senior Corps: This encompasses several programs like Foster Grandparents, Senior Companions, and RSVP (Retired and Senior Volunteer Program), allowing seniors to engage in meaningful volunteer work that often supports younger generations or helps those in need.
+
+  * Benefits: Participants in AmeriCorps Seniors can receive stipends, training, and the chance to make a positive impact in their communities while also combating social isolation.
+
+Together, AmeriCorps and AmeriCorps Seniors play a crucial role in fostering civic engagement and addressing community needs across the country.
+
+
+[AmeriCorps]: https://americorps.gov/
+
+
+There are several programs in AmeriCorps:
+
+* AmeriCorps
+
+  * AmeriCorps NCCC
+  
+  * AmeriCorps State and National
+  
+  * AmeriCorps VISTA
+  
+  * Public Health AmeriCorps
+  
+* AmeriCorps Seniors
+
+  * AmeriCorps Seniors Foster Grandparent Program
+  
+  * AmeriCorps Seniors RSVP
+  
+  * AmeriCorps Seniors Senior Companion Program
+  
+
+# Data Source
+
+* The data is collected and published by AmeriCorps.
+* The dataset provides comparisons of demographic group prevalence in AmeriCorps Member/Volunteers populations to that of the greater U.S. population. 
+* The data was initially published on October 19, 2023, and last modified on December 18, 2023.
+
+[Data]: https://catalog.data.gov/dataset/americorps-participant-demographics-data
+
+
+# Info on the dataset
+
 ```{r}
 americorps <- read.csv("/home/anusha/workspace/Data science/AmeriCorps-Volunteers/AmeriCorps_Participant_Demographics_Data.csv", header =TRUE)
+```
+* The source dataset consists of about 26000 observations over 17 attributes 
+* The data includes the following columns:
+```{r}
+names(americorps)
+```
+
+* Of these, for the analysis we are only interested in the following
+```{r}
+americorps <- americorps %>%
+  select(-odds_ratio_estimate,-lwr_95,-uppr_95, -representation,-magnitude_range_size, -significant)
+names(americorps)
+```
+
+* The data has already been cleared of missing or NA values and is being convert to desired variable type.
+
+The summary of the data:
+```{r}
+americorps$geography<-as.factor(americorps$geography)
+americorps$dem_cat<-as.factor(americorps$dem_cat)
+americorps$dem_group<-as.factor(americorps$dem_group)
+americorps$program_office<-as.factor(americorps$program_office)
+americorps$service_region<-as.factor(americorps$service_region)
+americorps$state<-as.factor(americorps$state)
+americorps$time_period<-as.factor(americorps$time_period)
+summary(americorps)
 ```
 
 
@@ -55,15 +131,6 @@ amco <- amco %>%
   filter(!dem_group %in% c("Racially Diverse (Non-White)"))
 ```
 
-```{r}
-amco$geography<-as.factor(amco$geography)
-amco$dem_cat<-as.factor(amco$dem_cat)
-amco$dem_group<-as.factor(amco$dem_group)
-amco$program_office<-as.factor(amco$program_office)
-amco$service_region<-as.factor(amco$service_region)
-amco$state<-as.factor(amco$state)
-amco$time_period<-as.factor(amco$time_period)
-```
 
 **1. Which program offices are most effective in engaging a diverse range of participants?**
 ```{r}
@@ -73,7 +140,7 @@ amco$time_period<-as.factor(amco$time_period)
 ```{r}
 ```
 **3. Which groups are overrepresented or underrepresented in AmeriCorps?**
-    ```{r}
+```{r}
 ```
 **4. How do participation rates compare between different programs within the same service region?**
 ```{r}
