@@ -1,6 +1,6 @@
 ---
-title: "Data Analysis (EDA) - AmeriCorps"
-author: "DATS 6101 Group8 [Anusha Umashankar](https://github.com/Anusha-raju)| [Aidan Carlisle](https://github.com/acarlisle8)| [Rachel Thomas](https://github.com/releered)| [Sayan Patra](https://github.com/Sayanpatraa)"
+title: "Analyzing the Demographic Diversity of Volunteer Participation in AmeriCorps"
+author: "[Anusha Umashankar](https://github.com/Anusha-raju)| [Aidan Carlisle](https://github.com/acarlisle8)| [Rachel Thomas](https://github.com/releered)| [Sayan Patra](https://github.com/Sayanpatraa) - Group 8 "
 # date: "today"
 date: "`r Sys.Date()`"
 output:
