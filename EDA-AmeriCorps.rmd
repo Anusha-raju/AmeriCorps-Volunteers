@@ -153,10 +153,39 @@ americorps_region <- americorps_subset %>%
 ```
 
 
+# Key points regarding the dataset
 
+* The total count of volunteers in a particular demograph is not measured as the number of volunteers in the demograph, rather is the summed number of Member Service Years (MSYs) or AmeriCorps Seniors volunteers belonging to the specific demographic group of interest.
 
 # SMART Questions
 
+**1. What is the racial composition of the volunteers?**
+```{r}
+group_MSY_national <- aggregate(count_dem_group ~ dem_group, data = americorps_national, sum)
+total_MSY_national <- sum(group_MSY_national$count_dem_group)
+group_MSY_national$percentage <- (group_MSY_national$count_dem_group / total_MSY_national) * 100
+
+ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  labs(title = "Race Distribution by Percentage of Member Service Years (MSY)", x = "Race", y = "MSY(%)") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") + 
+  geom_text(aes(label = round(percentage, 1)), vjust = 0, size = 3) +
+  theme(axis.text.x = element_blank()) +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 12, face = "bold", hjust = 0),
+        axis.title = element_text(size = 10, face = "bold"),
+        axis.text.x = element_text(size = 6, angle = 90, vjust = -3),
+        axix.text.y = element_text(size = 10))+
+  scale_y_continuous(breaks = seq(0, 100, by = 15))
+```
+
+## Notes:
+
+1. This graph describes the racial distribution by percentage of Member Service Years (MSY).
+2. The graph above displays racial groups along the x-axis and MSY percentages on the y-axis.
+3. The graph clearly indicates that volunteers identifying as white represent the highest percentage within the volunteer program.
+4. However, this observation does not suggest that other groups are not participating in volunteering activities. Instead, it indicates that the representation of these groups within the overall population reflects a similar odds ratio. This means that while certain groups may have higher visibility or recognition in volunteering efforts, others are equally active, but their engagement is proportionate to their demographic presence. Therefore, the data highlights a correlation between population distribution and volunteering rates, rather than an absence of participation from less represented groups.
 
 
 **1. Which program offices are most effective in engaging a diverse range of participants?**
@@ -172,9 +201,7 @@ americorps_region <- americorps_subset %>%
 **4. How do participation rates compare between different programs within the same service region?**
 ```{r}
 ```
-**5. What is the racial composition of the volunteers?**
-```{r}
-```
+
 **6.Are some racial groups more engaged in volunteer activities within specific states or program offices?**
 ```{r}
 ```
