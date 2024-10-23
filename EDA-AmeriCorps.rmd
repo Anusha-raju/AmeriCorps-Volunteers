@@ -277,6 +277,7 @@ ggplot(program_race_national, aes(x = program_office, y = total_dem_group, fill 
 **How do participation rates compare between different programs within the same service region?**
 
 ```{r}
+
 program_region <- americorps_region %>%
   group_by(service_region, program_office) %>%
   summarise (total_dem_group = sum(count_dem_group))
@@ -289,6 +290,7 @@ ggplot(program_region, aes(x = service_region, y = total_dem_group, fill = progr
   theme_minimal() +
   scale_fill_brewer(palette = "Set2") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
 ```
 
 
