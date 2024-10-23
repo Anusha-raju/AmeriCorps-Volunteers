@@ -280,7 +280,7 @@ race_breakdown <- amco_race_2022 %>%
 
 unique(amco$time_period)
 
-#mean MSY for dem groups
+#mean MSY for programs
 mean_progMSY_national <- national %>%
   group_by(program_office) %>%
   summarise(mean_dem_group = mean(count_dem_group, na.rm = TRUE))  # Calculate mean instead of sum
@@ -292,3 +292,9 @@ summary(anova_progMSY)
 
 tukey_progMSY <- TukeyHSD(anova_progMSY)
 print(tukey_progMSY)
+
+mean_race_state <- state %>%
+  group_by(state, dem_group) %>%
+  summarise (mean_dem_group = mean(count_dem_group))
+print(race_state)
+

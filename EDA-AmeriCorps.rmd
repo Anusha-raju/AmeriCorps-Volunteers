@@ -134,6 +134,26 @@ amco <- amco %>%
 
 **1. Which program offices are most effective in engaging a diverse range of participants?**
 ```{r}
+national <- amco %>%
+  filter(geography == "National")
+print(national)
+
+race_program_national <- aggregate(count_dem_group ~ program_office + dem_group, data = national, sum)
+print(race_program_national)
+
+program_race_national <- national %>%
+  group_by(program_office, dem_group) %>%
+  summarise (total_dem_group = sum(count_dem_group))
+print(program_race_national)
+
+ggplot(program_race_national, aes(x = program_office, y = total_dem_group, fill = dem_group)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Demographic Groups by Program Office", 
+       x = "Program Office", 
+       y = "Total MSY") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
 **2. How does the representation of different demographic groups compare to their proportions in the general population?**
@@ -144,11 +164,50 @@ amco <- amco %>%
 ```
 **4. How do participation rates compare between different programs within the same service region?**
 ```{r}
+region <- amco_r2022_noNW %>%
+  filter(geography == "Region")
+print(region)
+
+program_region <- region %>%
+  group_by(service_region, program_office) %>%
+  summarise (total_dem_group = sum(count_dem_group))
+print(program_region)
+
+ggplot(program_region, aes(x = service_region, y = total_dem_group, fill = program_office)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Demographic Groups by Program Office and Service Region", 
+       x = "Service Region", 
+       y = "Total MSY") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
+
+Overall impression is RSVP has a significantly higher level of participation than the rest of the groups, and the rest seem somewhat similar.
+```{r}
+mean_progMSY_national <- national %>%
+  group_by(program_office) %>%
+  summarise(mean_dem_group = mean(count_dem_group, na.rm = TRUE))  
+
+print(mean_progMSY_national)
+```
+H0: Mean MSY is equal between programs
+H1: Mean MSY is not equal between programs
+```{r}
+anova_progMSY <- aov(count_dem_group ~ program_office, data = national)
+summary(anova_progMSY)
+```
+p = 0.00822 < 0.05
+Reject H0
+```{r}
+tukey_progMSY <- TukeyHSD(anova_progMSY)
+print(tukey_progMSY)
+```
+p<0.05 for RSVP vs NCCC, RSVP vs SCP, RSVP vs SDP, RSVP vs VISTA, RSVP vs PH indicating RSVP mean MSY is statistically different from mean MSY in those programs. Remainder are >0.05 indiating their means are statistically equal.
+
 **5. What is the racial composition of the volunteers?**
 ```{r}
-#I think in this first chunk, need to replace amco_r2022_noNW with amco because that's how it's subsetted at the beginning? Also think this question should go to #1. I reordered the question on the ppt as well so they make more sense (ie go from least to most specific)
-national <- amco_r2022_noNW %>%
+national <- amco %>%
   filter(geography == "National")
 print(national)
 
@@ -165,18 +224,6 @@ total_MSY_national <- sum(group_MSY_national$count_dem_group)
 group_MSY_national$percentage <- (group_MSY_national$count_dem_group / total_MSY_national) * 100
 print(group_MSY_national)
 
-#total MSY bar chart
-ggplot(group_MSY_national, aes(x = dem_group, y = count_dem_group, fill = dem_group)) +
-  geom_bar(stat = "identity", width = 0.5) +
-  labs(title = "AmeriCorps Participation of Race by Member Service Years (MSY)", x = "Race", y = "MSY") +
-  theme_minimal() +
-  scale_fill_brewer(palette = "Set2") + 
-  geom_text(aes(label = count_dem_group), vjust = 0, size = 3.5) +
-  theme(axis.text.x = element_blank()) +
-  theme(plot.title = element_text(size = 20, face = "bold", hjust = 0),
-        axis.title = element_text(size = 16, face = "bold"),
-        axis.text.x = element_blank(),
-        axix.text.y = element_text(size = 10))
 
 #bar chart w %MSY
 ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group)) +
@@ -194,5 +241,41 @@ ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group))
   scale_y_continuous(breaks = seq(0, 100, by = 15))
 ```
 **6.Are some racial groups more engaged in volunteer activities within specific states or program offices?**
+
+By state
 ```{r}
+state <- amco %>%
+  filter(geography == "State")
+print(state)
+
+race_state <- state %>%
+  group_by(state, dem_group) %>%
+  summarise (total_dem_group = sum(count_dem_group))
+print(race_state)
+
+#stacked bar chart
+ggplot(race_state, aes(x = state, y = total_dem_group, fill = dem_group)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Demographic Groups by State", x = "State", y = "Total MSY") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+```
+
+By Program Office
+```{r]}
+program_race_national <- national %>%
+  group_by(program_office, dem_group) %>%
+  summarise (total_dem_group = sum(count_dem_group))
+print(program_race_national)
+
+ggplot(program_race_national, aes(x = program_office, y = total_dem_group, fill = dem_group)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Demographic Groups by Program Office", 
+       x = "Program Office", 
+       y = "Total MSY") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
