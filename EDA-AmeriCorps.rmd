@@ -12,6 +12,15 @@ output:
     toc_float: yes
 ---
 
+<style>
+
+h1 { color: #800000; }  
+
+h2 { color: #000080; } 
+h3 { color: #004d4d; } 
+
+</style>
+
 ```{r init, include=F}
 # The package "ezids" (EZ Intro to Data Science) includes a lot of the helper functions we developed for the course. 
 # Some of the frequently used functions are loadPkg(), xkabledply(), xkablesummary(), uzscale(), etc.
@@ -35,7 +44,7 @@ library(tidyr)
 
 
 
-# Introduction on AmeriCorps
+## Introduction on AmeriCorps
 
 [AmeriCorps](https://americorps.gov/) is a national service program in the United States, established in 1993, that encourages individuals to serve their communities through various initiatives. Members engage in projects that address pressing social issues such as education, health, public safety, and environmental sustainability. In return for their service, members may receive benefits like education awards, living stipends, and professional experience.
 
@@ -70,9 +79,9 @@ There are several programs in AmeriCorps:
   
   * AmeriCorps Seniors Senior Companion Program
   
-
-
-# Data Source
+  
+  
+## Data Source
 
 * The [Data](https://catalog.data.gov/dataset/americorps-participant-demographics-data) is collected and published by AmeriCorps.
 * The dataset provides comparisons of demographic group prevalence in AmeriCorps Member/Volunteers populations to that of the greater U.S. population. 
@@ -81,7 +90,7 @@ There are several programs in AmeriCorps:
 
 
 
-# Info on the dataset
+## Info on the dataset
 
 ```{r}
 americorps <- read.csv("/home/anusha/workspace/Data science/AmeriCorps-Volunteers/AmeriCorps_Participant_Demographics_Data.csv", header =TRUE)
@@ -116,7 +125,7 @@ summary(americorps)
 
 
 
-# Preprocessing the data
+## Preprocessing the data
 
 * The summary rows of the analysis, including program office categories such as "All AmeriCorps Members," "AmeriCorps Member Programs (no NCCC)," and "AmeriCorps Seniors (All)," were also included in the dataset; therefore, they are removed.
 
@@ -158,7 +167,7 @@ americorps_region <- americorps_subset %>%
 
 
 
-# Key points regarding the dataset
+## Key points regarding the dataset
 
 * The total count of volunteers in a particular demograph is not measured as the number of volunteers in the demograph, rather is the summed number of Member Service Years (MSYs) or AmeriCorps Seniors volunteers belonging to the specific demographic group of interest.
 
@@ -167,10 +176,9 @@ americorps_region <- americorps_subset %>%
 
 
 
+## SMART Questions
 
-# SMART Questions
-
-## Question 1
+### Question 1
 
 
 **What is the racial composition of the volunteers?**
@@ -196,7 +204,7 @@ ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group))
 ```
 
 
-### Notes on Question 1:
+#### Notes on Question 1:
 
 1. This graph describes the racial distribution by percentage of Member Service Years (MSY).
 
@@ -210,7 +218,7 @@ ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group))
 
 
 
-## Question 2
+### Question 2
 
 
 **Are some racial groups more engaged in volunteer activities within specific states or program offices?**
@@ -221,15 +229,19 @@ race_state <- americorps_state %>%
   summarise(total_dem_group = sum(count_dem_group))
 
 ggplot(race_state, aes(x = state, y = total_dem_group, fill = dem_group)) +
-  geom_bar(stat = "identity") +
+  geom_bar(stat = "identity", width = 0.8) +
   labs(title = "Total Demographic Groups by State", x = "State", y = "Total MSY") +
   theme_minimal() +
   scale_fill_brewer(palette = "Set2") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+    legend.title = element_text(size = 5),  
+    legend.text = element_text(size = 6),   
+    legend.key.size = unit(2, "mm")
+  )+ expand_limits(x = c(-1, 15))  
 ```
 
-### Notes on Question 2:
+#### Notes on Question 2:
 
 1. For the above analysis, we focused on the state level race data and group the dataset across states.
 
@@ -243,7 +255,7 @@ ggplot(race_state, aes(x = state, y = total_dem_group, fill = dem_group)) +
 5. Their is no observation recorded for North Dakota, the reason could either be that the their is actually no volunteers or that the volunteers didn't record themselves in the data.
 
 
-## Question 3
+### Question 3
 
 
 **Which program offices are most effective in engaging a diverse range of participants?**
@@ -261,7 +273,7 @@ ggplot(program_race_national, aes(x = program_office, y = total_dem_group, fill 
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
-### Notes on Question 3:
+#### Notes on Question 3:
 
 1. For the above analysis, we focused on the national level race data and group the dataset across program offices.
 
@@ -272,7 +284,7 @@ ggplot(program_race_national, aes(x = program_office, y = total_dem_group, fill 
 4. This contradiction invites further exploration into the motivations and circumstances surrounding volunteerism across different age groups. It prompts questions about how societal narratives about youth engagement in volunteerism may overlook the significant contributions of older adults. Moreover, it highlights the need for a nuanced understanding of volunteer dynamics, where both age groups can coexist and thrive in community service, even if the numbers reflect a surprising trend. Overall, this finding underscores the importance of recognizing and valuing the diverse contributions of volunteers across all age demographics.
 
 
-## Question 4
+### Question 4
 
 **How do participation rates compare between different programs within the same service region?**
 
@@ -294,7 +306,7 @@ ggplot(program_region, aes(x = service_region, y = total_dem_group, fill = progr
 ```
 
 
-### Notes on Question 4:
+#### Notes on Question 4:
 
 1. For the above analysis, we focused on the regional level data and group the dataset across regions and program offices.
 
@@ -305,7 +317,9 @@ ggplot(program_region, aes(x = service_region, y = total_dem_group, fill = progr
 4. The Public Health AmeriCorps and the NCCC has relatively fewer volunteers and hence are not prominently represented on the graph.
 
 
-## Unanswered Questions
+
+
+### Unanswered Questions
 
 **How does the representation of different demographic groups compare to their proportions in the general population?**
 
@@ -316,7 +330,11 @@ ggplot(program_region, aes(x = service_region, y = total_dem_group, fill = progr
 * The dataset lacks details on how to translate Member Service Years (MSYs) into actual volunteer counts. As a result, we are unable to draw direct comparisons between the representation of various demographic groups within the volunteer population and their proportions in the general population. This limitation hinders our ability to assess whether certain demographics are overrepresented or underrepresented among volunteers. Without this crucial conversion information, analyzing the relationship between MSYs and demographic representation becomes challenging.
 
 
-# Conclusions
+
+
+
+
+## Conclusions
 
 
 The analysis of the AmeriCorps dataset reveals several insights regarding volunteer demographics and participation across various programs.
@@ -334,7 +352,10 @@ The analysis of the AmeriCorps dataset reveals several insights regarding volunt
 In summary, while the AmeriCorps dataset provides valuable insights into volunteer demographics, it also highlights critical areas for further research and understanding, particularly regarding the motivations of various age groups and the implications of demographic representation in volunteerism. These findings underscore the importance of recognizing the diverse contributions of volunteers and enhancing efforts to engage underrepresented groups in service activities.
 
 
-# Additional information on DATA
+
+
+
+## Additional information on DATA
 
 **Data description:**
 
@@ -350,7 +371,11 @@ americorps_datadefiniton %>%
 
 ```
 
-# Related Resources
+
+
+
+
+## Related Resources
 
 1. Topic proposal: [TopicProposal.docx](https://github.com/Anusha-raju/AmeriCorps-Volunteers/blob/main/Topic%20Proposal.docx)
 
