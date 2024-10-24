@@ -188,7 +188,7 @@ ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group))
 
 This graph describes the racial distribution by percentage of Member Service Years (MSY) of all AmeriCorps volunteers in any affiliated program at the national level. The graph above displays racial groups along the x-axis and MSY percentages on the y-axis.
 
-The graph clearly indicates that volunteers identifying as white represent the highest percentage of volunteers across all AmeriCorps programs. However, this observation does not suggest that other groups are not volunteering. Instead, the distribution of MSYs overall may be comparable to the racial distribution of the United States. The data highlights a likely correlation between population distribution and volunteerism rates, rather than an absence of participation from less represented groups.
+The graph clearly indicates that volunteers identifying as white represent the highest percentage of MSYs across all AmeriCorps programs. However, this observation does not suggest that other groups are not volunteering. Instead, the distribution of MSYs overall may be comparable to the racial distribution of the United States. The data highlights a likely correlation between population distribution and volunteerism rates, rather than an absence of participation from less represented groups.
 
 
 
@@ -218,7 +218,7 @@ ggplot(race_state, aes(x = state, y = total_dem_group, fill = dem_group)) +
 
 To answer this question, we analyzed racial distribution of all AmeriCorps volunteers at the state level. The graph above displays states along the x-axis and total MSY on the y-axis with each bar segmented into color blocks representing various demographic groups.This graph conveys both the overall distribution of the volunteers by state and the relative representation of each demographic group amongst each state's volunteers.
 
-The graph does clearly indicates Texas has the largest number of total volunteers followed by Minnesota, California, and New York. However the volunteer diversity appears to be more pronounced in California, as indicating by a larger proportion of not-"White" volunteers. While this may be attributable to improved recruiting efforts, California's apparent volunteer diversity may also be due to increased overall diversity in California's general population. There is apparently minimal participation in North Dakota,Wyoming, Alaska, and Nebraska. This could be due to discrepancies in reporting, or, as in the case of Wyoming or Alaksa, may be reflective of their small total populations.
+The graph does clearly indicates Texas has the largest number of total MSYs followed by Minnesota, California, and New York. However the volunteer diversity appears to be more pronounced in California, as indicating by a larger proportion of not-"White" volunteers. While this may be attributable to improved recruiting efforts, California's apparent volunteer diversity may also be due to increased overall diversity in California's general population. There is apparently minimal participation in North Dakota,Wyoming, Alaska, and Nebraska. This could be due to discrepancies in reporting, or, as in the case of Wyoming or Alaksa, may be reflective of their small total populations.
 
 
 ### Question 3
@@ -240,9 +240,9 @@ ggplot(program_race_national, aes(x = program_office, y = total_dem_group, fill 
 ```
 
 
-To answer this question, we analyzed racial distribution of all AmeriCorps volunteers by program. The graph depicts total demographic group MSYs by program office where each AmeriCorps program office is on the x axis and the "Total MSY" is on the y axis, with each bar segmented into color blocks representing various demographic groups. This graph conveys both the overall distribution of the volunteers by program office and the relative representation of each demographic group amongst each program's volunteers.
+To answer this question, we analyzed racial distribution of all AmeriCorps volunteers by program. The graph depicts total demographic group MSYs by program office where each AmeriCorps program office is on the x axis and the "Total MSY" is on the y axis, with each bar segmented into color blocks representing various demographic groups. This graph conveys both the overall distribution of MSYs by program office and the relative representation of each demographic group amongst each program's volunteers.
 
-While AmeriCorps Seniors RSVP clearly has the largest number of volunteers, it is also apparently the least diverse as indicated by the ratio of colored bands (representing various non-white racial groups), versus the brown band (representing the white racial group). Proportionally, the other programs' volunteers appear more diverse.
+While AmeriCorps Seniors RSVP clearly has the largest number of MSYs, it is also apparently the least diverse as indicated by the ratio of colored bands (representing various non-white racial groups), versus the brown band (representing the white racial group). Proportionally, the other programs' volunteers appear more diverse.
 
 
 ### Question 4
@@ -269,7 +269,7 @@ ggplot(program_region, aes(x = service_region, y = total_dem_group, fill = progr
 
 To answer this question, we analyzed distribution of all AmeriCorps volunteers by program for each region. The graph depicts the total MSYs by program office and service regions, where regions is along the x axis and the "Total MSY" across program offices is on the y axis, with each bar segmented into color blocks that represent various AmeriCorps programs. This graph conveys both the overall distribution of the volunteers by program office in each region
 
-The relative proportions of volunteers from different AmeriCorps programs appears consistent across regions, with the exception of a notably high proportion of AmeriCorps Seniors RSVP participants. The Public Health AmeriCorps and the NCCC have very few MSYs reported, and hence are not prominently represented on the graph.
+The relative proportions of volunteer MSYs from different AmeriCorps programs appears consistent across regions, with the exception of a notably high proportion of AmeriCorps Seniors RSVP participants. The Public Health AmeriCorps and the NCCC have very few MSYs reported, and hence are not prominently represented on the graph.
 
 The finding that AmeriCorps Seniors has by far the most MSYs challenges the perception that America's youth would be more likely to engage in volunteer activities. This is further surprising given the core AmeriCorps programs targeting younger volunteers are more widely known in the United States.
 
