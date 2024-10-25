@@ -46,7 +46,7 @@ library(tidyr)
 
 ## Introduction on AmeriCorps
 
-[AmeriCorps](https://americorps.gov/) is a national service program in the United States, established in 1993, that encourages individuals to serve their communities through various initiatives. Members engage in projects that address pressing social issues such as education, health, public safety, and environmental sustainability. In return for their service, members may receive benefits like education awards, living stipends, and professional experience.
+[AmeriCorps](https://americorps.gov/) is a national service program in the United States, established in 1993, that encourages individuals to serve their communities through various initiatives. Members engage in projects that address pressing social issues such as education, health, public safety, and environmental sustainability. In return for their service, members may receive benefits like education awards, living stipends, and professional experience. Americorps also offers grants so that recipients can create service projects that suit the unique needs of their community
 
 AmeriCorps programs are split into two categories: AmeriCorps and AmeriCorps Seniors. AmeriCorps core programs include National Civilian Community Corps (NCCC), State and National, and Volunteers in Service to America (VISTA). Public Health AmeriCorps falls under State and National. These core AmeriCorps programs typically recruit volunteers in, or recently graduated from, colleges and universities. Volunteers to these progrms serve in many ways, including on short deployments with FEMA or the US Forest Service, in all aspects of community support, or embedded in organizations working on sustainable change for poverty, climate change, or education.
 
