@@ -1,16 +1,25 @@
 ---
-title: "Exploratory Data Analysis (EDA) - AmeriCorps"
-author: "GWU Intro to Data Science -- DATS 6101 Group8"
+title: "Analyzing the Demographic Diversity of Volunteer Participation in AmeriCorps"
+author: "[Anusha Umashankar](https://github.com/Anusha-raju)| [Aidan Carlisle](https://github.com/acarlisle8)| [Rachel Thomas](https://github.com/releered)| [Sayan Patra](https://github.com/Sayanpatraa) - Group 8 "
 # date: "today"
 date: "`r Sys.Date()`"
 output:
   html_document:
-    code_folding: show
+    code_folding: hide
     number_sections: false
     toc: yes
     toc_depth: 3
     toc_float: yes
 ---
+
+<style>
+
+h1 { color: #800000; }  
+
+h2 { color: #000080; } 
+h3 { color: #004d4d; } 
+
+</style>
 
 ```{r init, include=F}
 # The package "ezids" (EZ Intro to Data Science) includes a lot of the helper functions we developed for the course. 
@@ -35,71 +44,34 @@ library(tidyr)
 
 
 
-# Introduction on AmeriCorps
+## Introduction on AmeriCorps
 
-AmeriCorps is a national service program in the United States, established in 1993, that encourages individuals to serve their communities through various initiatives.. Its mission is to “Improve lives , strengthen communities, and foster civic engagement through service and volunteering.”  Members engage in projects that address pressing social issues such as education, health, public safety, and environmental sustainability. In return for their service, members may receive benefits like education awards, living stipends, and professional experience.
+[AmeriCorps](https://americorps.gov/) is a national service program in the United States, established in 1993, that encourages individuals to serve their communities through various initiatives. Members engage in projects that address pressing social issues such as education, health, public safety, and environmental sustainability. In return for their service, members may receive benefits like education awards, living stipends, and professional experience.
 
-Americorp members serve in different programs that focus on specific methods of service. Americorp also offers grants to fund service projects, allowing grant recipients to tailor solutions to their communities 
+AmeriCorps programs are split into two categories: AmeriCorps and AmeriCorps Seniors. AmeriCorps core programs include National Civilian Community Corps (NCCC), State and National, and Volunteers in Service to America (VISTA). Public Health AmeriCorps falls under State and National. These core AmeriCorps programs typically recruit volunteers in, or recently graduated from, colleges and universities. Volunteers to these progrms serve in many ways, including on short deployments with FEMA or the US Forest Service, in all aspects of community support, or embedded in organizations working on sustainable change for poverty, climate change, or education.
 
-Americorps Program w/ Brief Description
+Comprised of four core programs, AmeriCorps Seniors provides opportunities for for adults aged 55 and over to contribute their skills and experience to community service. AmeriCorps Seniors programs include Foster Grandparent Program (FGP), Retired and Senior Volunteer Program (RSVP), and Senior Companion Program (SCP). AmeriCorps Seniors programs encourage seniors to engage in meaningful volunteer work that often supports younger generations or helps those in need.
 
-Americorps NCCC (National Civilian Community Corps): is a program that engages 18-26 year olds in team based community service projects focused on education, climate change mitigation, building affordable housing and disaster response.
-
-AmeriCorps State & National: a volunteer program focused on meeting the critical needs of the community in areas of education, disaster services, health etc.
-
-Public Health Americorps: a program designed to improve public health outcomes
-
-Americorps VISTA (Volunteers in Service to America) is dedicated to fighting poverty through capacity-building activities in organizations addressing issues like public health, education, and the environment
-
-AmeriCorps Seniors is a specific branch of the AmeriCorps aimed at older adults, typically aged 55 and over. It provides opportunities for seniors to contribute their skills and experience to community service. Programs under AmeriCorps Seniors include:
-
-Americorp Seniors FGP (Foster Grandparent Program): a volunteer program focused on matching older adults with children and youth in need. The purpose is to facilitate sharing and mentorship between generations.
-Americorps Seniors RSVP (Retired Senior Volunteer Program): a volunteer program for retired adults. Focuses in categories of tutoring, mentoring, and environmental conservation
-Americorp Seniors SCP (Senior Companion Program): a volunteer program designed to assist adults that need help with daily activities 
-Americorp Seniors SDP (Senior Demonstration Program): is a grant program designed to provide older adults with grants to serve their communities through service
-
-* Benefits: Participants in AmeriCorps Seniors can receive stipends, training, and the chance to make a positive impact in their communities while also combating social isolation.
+In addition to supporting local communities and the country at-large, work in AmeriCorps programs provide numerous benefits to the volunteers as well. For the younger volunteers, these include living allowance, money for college, loan deferment, professional development, and networking. For older volunteers, benefits include health and wellness, interaction in the community, self-improvement, learning new skills, a stipend, and insurance.
 
 Together, AmeriCorps and AmeriCorps Seniors play a crucial role in fostering civic engagement and addressing community needs across the country.
 
 
-[AmeriCorps]: https://americorps.gov/
 
 
-There are several programs in AmeriCorps:
+## Data Source
 
-* AmeriCorps
-
-  * AmeriCorps NCCC
-  
-  * AmeriCorps State and National
-  
-  * AmeriCorps VISTA
-  
-  * Public Health AmeriCorps
-  
-* AmeriCorps Seniors
-
-  * AmeriCorps Seniors Foster Grandparent Program
-  
-  * AmeriCorps Seniors RSVP
-  
-  * AmeriCorps Seniors Senior Companion Program
-  
-
-# Data Source
-
-* The data is collected and published by AmeriCorps.
+* The [Data](https://catalog.data.gov/dataset/americorps-participant-demographics-data) is collected and published by AmeriCorps.
 * The dataset provides comparisons of demographic group prevalence in AmeriCorps Member/Volunteers populations to that of the greater U.S. population. 
 * The data was initially published on October 19, 2023, and last modified on December 18, 2023.
 
-[Data]: https://catalog.data.gov/dataset/americorps-participant-demographics-data
 
 
-# Info on the dataset
+
+## Info on the dataset
 
 ```{r}
-americorps <- read.csv("Americorps_Participant_Demographics_Data.csv", header =TRUE)
+americorps <- read.csv("/home/anusha/workspace/Data science/AmeriCorps-Volunteers/AmeriCorps_Participant_Demographics_Data.csv", header =TRUE)
 ```
 * The source dataset consists of about 26000 observations over 17 attributes 
 * The data includes the following columns:
@@ -107,14 +79,14 @@ americorps <- read.csv("Americorps_Participant_Demographics_Data.csv", header =T
 names(americorps)
 ```
 
-* Of these, for the analysis we are only interested in the following
+* For this analysis, we utilized only the following variables:
 ```{r}
 americorps <- americorps %>%
   select(-odds_ratio_estimate,-lwr_95,-uppr_95, -representation,-magnitude_range_size, -significant)
 names(americorps)
 ```
 
-* The data has already been cleared of missing or NA values and is being convert to desired variable type.
+* The data was previously of missing or NA values by AmeriCorps. We converted categorical variables to factors for analysis.
 
 The summary of the data:
 ```{r}
@@ -129,70 +101,75 @@ summary(americorps)
 ```
 
 
+
+
+## Preprocessing the data
+
+* The dataset included previously compiled summary rows for program office categories including "All AmeriCorps Members," "AmeriCorps Member Programs (no NCCC)," and "AmeriCorps Seniors (All)." These were removed to prevent duplicate records.
+
+```{r}
+americorps_subset <- americorps %>%
+  filter(!program_office %in% c("All AmeriCorps Members", "AmeriCorps Member Programs (no NCCC)", "AmeriCorps Seniors (All)"))
+```
+
+* The data also had the summary row, "Racially Diverse (Non-White)", as a demographic group, which was the sum of all racial group values except for "White". This was also removed to prevent counting duplicate records.
+```{r}
+americorps_subset <- americorps_subset %>% filter(!dem_group %in% c("Racially Diverse (Non-White)"))
+```
+
+* For this analysis we are only considering the data with respect to the demographic category, "Race", and only records for the year "2022."
 ```{r}
 dem_cat_subset <- 'Race'
-amco <- americorps %>%
+americorps_subset <- americorps_subset %>%
   filter(dem_cat == dem_cat_subset)
 
 time_period_subset <- '2022'
-amco <- amco %>%
+americorps_subset <- americorps_subset %>%
   filter(time_period == time_period_subset)
-
-amco <- amco %>%
-  filter(!program_office %in% c("All AmeriCorps Members", "AmeriCorps Member Programs (no NCCC)", "AmeriCorps Seniors (All)"))
-
-amco <- amco %>%
-  filter(!dem_group %in% c("Racially Diverse (Non-White)"))
 ```
 
+* The data was also compiled at at three geographic levels, National, State, and Region. To avoid duplication, the data was subsetted to enable evaluation at a single given level.
 
-**1. Which program offices are most effective in engaging a diverse range of participants?**
 ```{r}
-```
-
-**2. How does the representation of different demographic groups compare to their proportions in the general population?**
-```{r}
-```
-**3. Which groups are overrepresented or underrepresented in AmeriCorps?**
-```{r}
-```
-**4. How do participation rates compare between different programs within the same service region?**
-```{r}
-```
-**5. What is the racial composition of the volunteers?**
-```{r}
-#I think in this first chunk, need to replace amco_r2022_noNW with amco because that's how it's subsetted at the beginning? Also think this question should go to #1. I reordered the question on the ppt as well so they make more sense (ie go from least to most specific)
-national <- amco_r2022_noNW %>%
+#filter by national
+americorps_national <- americorps_subset %>%
   filter(geography == "National")
-print(national)
+#filter by state
+americorps_state <- americorps_subset %>%
+  filter(geography == "State")
+#filter by region
+americorps_region <- americorps_subset %>%
+  filter(geography == "Region")
 
-program_MSY_national <- national %>%
-  group_by(program_office) %>%
-  summarise (total_dem_group = sum(count_dem_group))
-print(program_MSY_national)
+```
 
-race_program_national <- aggregate(count_dem_group ~ program_office + dem_group, data = national, sum)
-print(race_program_national)
 
-group_MSY_national <- aggregate(count_dem_group ~ dem_group, data = national, sum)
+
+## Key points regarding the dataset
+
+* Member population data is collected at the individual level for AmeriCorps programs, but AmeriCorps Seniors population data is not. Instead, AmeriCorps Seniors volunteer data is reported by sponsors. Differences exist in the service time allotments assigned to difference demographic groups. 
+
+* To account for these differences, in this dataset, the total count of volunteers (count_dem_group variable) is not measured as the literal number of volunteers. Instead, it is the summed number of Member Service Years (MSYs) or AmeriCorps Seniors volunteers belonging to the specific demographic group. 
+
+* Member service years (MSYs) are the number of days or hours members are required to serve over the course of their term to fulfill their service requirements. 
+
+
+
+
+## SMART Questions
+
+For this analysis, we hoped to understand the racial distribution of AmeriCorps volunteers,and whether that distribution is reflective of population of the United States at-large.
+
+### Question 1
+
+
+**What is the racial composition of the volunteers?**
+
+```{r}
+group_MSY_national <- aggregate(count_dem_group ~ dem_group, data = americorps_national, sum)
 total_MSY_national <- sum(group_MSY_national$count_dem_group)
 group_MSY_national$percentage <- (group_MSY_national$count_dem_group / total_MSY_national) * 100
-print(group_MSY_national)
 
-#total MSY bar chart
-ggplot(group_MSY_national, aes(x = dem_group, y = count_dem_group, fill = dem_group)) +
-  geom_bar(stat = "identity", width = 0.5) +
-  labs(title = "AmeriCorps Participation of Race by Member Service Years (MSY)", x = "Race", y = "MSY") +
-  theme_minimal() +
-  scale_fill_brewer(palette = "Set2") + 
-  geom_text(aes(label = count_dem_group), vjust = 0, size = 3.5) +
-  theme(axis.text.x = element_blank()) +
-  theme(plot.title = element_text(size = 20, face = "bold", hjust = 0),
-        axis.title = element_text(size = 16, face = "bold"),
-        axis.text.x = element_blank(),
-        axix.text.y = element_text(size = 10))
-
-#bar chart w %MSY
 ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group)) +
   geom_bar(stat = "identity", width = 0.6) +
   labs(title = "Race Distribution by Percentage of Member Service Years (MSY)", x = "Race", y = "MSY(%)") +
@@ -207,6 +184,162 @@ ggplot(group_MSY_national, aes(x = dem_group, y = percentage, fill = dem_group))
         axix.text.y = element_text(size = 10))+
   scale_y_continuous(breaks = seq(0, 100, by = 15))
 ```
-**6.Are some racial groups more engaged in volunteer activities within specific states or program offices?**
+
+
+This graph describes the racial distribution by percentage of Member Service Years (MSY) of all AmeriCorps volunteers in any affiliated program at the national level. The graph above displays racial groups along the x-axis and MSY percentages on the y-axis.
+
+The graph clearly indicates that volunteers identifying as white represent the highest percentage of MSYs across all AmeriCorps programs. However, this observation does not suggest that other groups are not volunteering. Instead, the distribution of MSYs overall may be comparable to the racial distribution of the United States. The data highlights a likely correlation between population distribution and volunteerism rates, rather than an absence of participation from less represented groups.
+
+
+
+### Question 2
+
+
+**Are some racial groups more engaged in volunteer activities within specific states?**
 ```{r}
+
+race_state <- americorps_state %>%
+  group_by(state, dem_group) %>%
+  summarise(total_dem_group = sum(count_dem_group))
+
+ggplot(race_state, aes(x = state, y = total_dem_group, fill = dem_group)) +
+  geom_bar(stat = "identity", width = 0.8) +
+  labs(title = "Total Demographic Groups by State", x = "State", y = "Total MSY") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+    legend.title = element_text(size = 5),  
+    legend.text = element_text(size = 6),   
+    legend.key.size = unit(2, "mm")
+  )+ expand_limits(x = c(-1, 15))  
 ```
+
+
+To answer this question, we analyzed racial distribution of all AmeriCorps volunteers at the state level. The graph above displays states along the x-axis and total MSY on the y-axis with each bar segmented into color blocks representing various demographic groups.This graph conveys both the overall distribution of the volunteers by state and the relative representation of each demographic group amongst each state's volunteers.
+
+The graph does clearly indicates Texas has the largest number of total MSYs followed by Minnesota, California, and New York. However the volunteer diversity appears to be more pronounced in California, as indicating by a larger proportion of not-"White" volunteers. While this may be attributable to improved recruiting efforts, California's apparent volunteer diversity may also be due to increased overall diversity in California's general population. There is apparently minimal participation in North Dakota,Wyoming, Alaska, and Nebraska. This could be due to discrepancies in reporting, or, as in the case of Wyoming or Alaksa, may be reflective of their small total populations.
+
+
+### Question 3
+
+
+**Which program offices are most effective in engaging a diverse range of participants?**
+```{r}
+program_race_national <- americorps_national %>%
+  group_by(program_office, dem_group) %>%
+  summarise (total_dem_group = sum(count_dem_group))
+ggplot(program_race_national, aes(x = program_office, y = total_dem_group, fill = dem_group)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Demographic Groups by Program Office", 
+       x = "Program Office", 
+       y = "Total MSY") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+```
+
+
+To answer this question, we analyzed racial distribution of all AmeriCorps volunteers by program. The graph depicts total demographic group MSYs by program office where each AmeriCorps program office is on the x axis and the "Total MSY" is on the y axis, with each bar segmented into color blocks representing various demographic groups. This graph conveys both the overall distribution of MSYs by program office and the relative representation of each demographic group amongst each program's volunteers.
+
+While AmeriCorps Seniors RSVP clearly has the largest number of MSYs, it is also apparently the least diverse as indicated by the ratio of colored bands (representing various non-white racial groups), versus the brown band (representing the white racial group). Proportionally, the other programs' volunteers appear more diverse.
+
+
+### Question 4
+
+**How do participation rates compare between different programs within the same service region?**
+
+```{r}
+
+program_region <- americorps_region %>%
+  group_by(service_region, program_office) %>%
+  summarise (total_dem_group = sum(count_dem_group))
+
+ggplot(program_region, aes(x = service_region, y = total_dem_group, fill = program_office)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Demographic Groups by Program Office and Service Region", 
+       x = "Service Region", 
+       y = "Total MSY") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+```
+
+
+To answer this question, we analyzed distribution of all AmeriCorps volunteers by program for each region. The graph depicts the total MSYs by program office and service regions, where regions is along the x axis and the "Total MSY" across program offices is on the y axis, with each bar segmented into color blocks that represent various AmeriCorps programs. This graph conveys both the overall distribution of the volunteers by program office in each region
+
+The relative proportions of volunteer MSYs from different AmeriCorps programs appears consistent across regions, with the exception of a notably high proportion of AmeriCorps Seniors RSVP participants. The Public Health AmeriCorps and the NCCC have very few MSYs reported, and hence are not prominently represented on the graph.
+
+The finding that AmeriCorps Seniors has by far the most MSYs challenges the perception that America's youth would be more likely to engage in volunteer activities. This is further surprising given the core AmeriCorps programs targeting younger volunteers are more widely known in the United States.
+
+This contradiction invites further exploration into the motivations and circumstances surrounding volunteerism across different age groups. It prompts questions about how societal narratives about youth engagement in volunteerism may overlook the significant contributions of older adults. Moreover, it highlights the need for a nuanced understanding of volunteer dynamics, where both age groups can coexist and thrive in community service, even if the numbers reflect a surprising trend. Overall, this finding underscores the importance of recognizing and valuing the diverse contributions of volunteers across all age demographics.
+
+
+
+
+### Unanswered Questions
+
+**How does the representation of different demographic groups compare to their proportions in the general population?**
+
+
+**Which groups are overrepresented or underrepresented in AmeriCorps?**
+
+Although this dataset was designed by AmeriCorps to specifically answer these questions of represenation, we were unable to understand how to translate Member Service Years (MSYs) into actual volunteer counts. As a result, we are unable to draw direct comparisons between the representation of various demographic groups within the volunteer population and their proportions in the general population. This limitation hinders our ability to assess whether certain racial groups are overrepresented or underrepresented among volunteers. Without this crucial conversion information, analyzing the relationship between MSYs and demographic representation becomes challenging.
+
+
+
+
+
+
+## Conclusions
+
+
+The analysis of the AmeriCorps dataset reveals several insights regarding volunteer demographics and participation across various programs.
+
+  * **Racial Composition**: The dataset shows a predominance of white volunteers within AmeriCorps programs, likely aligning with their representation in the general United States population. The participation of non-white racial groups is likely similarly represetative. 
+
+  * **State Engagement Variations**: Texas leads in volunteer numbers, followed by Minnesota. However, California has a more diverse volunteer distriubution. This indicates that state-level initiatives may significantly influence volunteer engagement and diversity.
+
+  * **Program Effectiveness**: While AmeriCorps Seniors RSVP has the most volunteer hours, it is also least diverse. This may be a reflection of the type of older American who chooses, or is able, to volunteer, or a reflection of the locations in which RSVP programs are popular. Most other AmeriCorps programs are significantly more diverse, likely reflecting successful efforts targeting non-white volunteers.
+
+  * **Program Participation Consistency**: AmeriCorps Seniors RSVP stands out with the highest recorded volunteer numbers, challenging the perception that younger individuals are the primary drivers of volunteerism. This finding emphasizes the vital role older adults play in community service, suggesting a need for further exploration of volunteer motivations across age groups. The consistency in volunteer proportions across different AmeriCorps programs in regions suggests that regional volunteer engagement is stable, although certain programs like Public Health AmeriCorps and NCCC have lower representation.
+
+  * **Data Limitations**: A significant limitation of the dataset is the lack of a clear method to convert Member Service Years (MSYs) into actual volunteer counts. This gap restricts the ability to compare the representation of different demographic groups against their overall population proportions, leaving unanswered questions regarding overrepresentation or underrepresentation in the volunteer sector.
+
+In summary, while the AmeriCorps dataset provides valuable insights into volunteer demographics, it also highlights critical areas for further research and understanding, particularly regarding the motivations of various age groups and the implications of demographic representation in volunteerism. These findings underscore the importance of recognizing the diverse contributions of volunteers and enhancing efforts to engage underrepresented groups in service activities.
+
+
+
+
+
+## Additional information on DATA
+
+**Data description:**
+
+```{r}
+americorps_datadefiniton <- read.csv("/home/anusha/workspace/Data science/AmeriCorps-Volunteers/data description.csv", header =TRUE)
+library(kableExtra)
+
+americorps_datadefiniton %>%
+  kable("html") %>%
+  kable_styling("striped", full_width = FALSE, position = "center") %>%
+  column_spec(2, 
+              extra_css = "overflow-y: auto; max-height: 200px; display: block;")
+
+```
+
+
+
+
+
+## References
+
+1. AmeriCorps. (2023). AmeriCorps Participant Demographics Data. [Data set]. AmeriCorps. https://catalog.data.gov/dataset/americorps-participant-demographics-data
+
+2. AmeriCorps, Office of the Chief Data Officer. (2023, October 6). AmeriCorp Demographic Analysis Procedure. https://data.americorps.gov/National-Service/AmeriCorps-Participant-Demographics-Data/i9xs-fvag/about_data 
+
+3. Github: [AmeriCorps-Volunteers](https://github.com/Anusha-raju/AmeriCorps-Volunteers.git)
+
+4. Topic proposal: [TopicProposal.docx](https://github.com/Anusha-raju/AmeriCorps-Volunteers/blob/main/Topic%20Proposal.docx)
+
