@@ -298,7 +298,7 @@ In summary, while the AmeriCorps dataset provides valuable insights into volunte
 **Data description:**
 
 ```{r}
-americorps_datadefiniton <- read.csv("//Users/rachelthomas/Desktop/DATS6101/Americorps Project/AmeriCorps-Volunteers/AmeriCorps_Participant_Demographics_Data.csv", header =TRUE)
+americorps_datadefiniton <- read.csv("https://raw.githubusercontent.com/Anusha-raju/AmeriCorps-Volunteers/main/data%20description.csv", header =TRUE)
 library(kableExtra)
 
 americorps_datadefiniton %>%
