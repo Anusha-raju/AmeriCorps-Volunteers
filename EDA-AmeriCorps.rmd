@@ -66,7 +66,7 @@ Together, AmeriCorps and AmeriCorps Seniors play a crucial role in fostering civ
 * The data was initially published on October 19, 2023, and last modified on December 18, 2023.
 
 ```{r}
-americorps <- read.csv("/Users/rachelthomas/Desktop/DATS6101/Americorps Project/AmeriCorps-Volunteers/AmeriCorps_Participant_Demographics_Data.csv", header =TRUE)
+americorps <- read.csv("https://raw.githubusercontent.com/Anusha-raju/AmeriCorps-Volunteers/main/AmeriCorps_Participant_Demographics_Data.csv", header =TRUE)
 ```
 * The source dataset consists of about 26000 observations over 17 attributes. 
 * The data includes the following columns:
