@@ -1,4 +1,43 @@
-amco = read.csv("/Users/rachelthomas/Desktop/DATS6101/Americorps Project/AmeriCorps-Volunteers/AmeriCorps_Participant_Demographics_Data.csv")
+---
+title: "Exploratory Data Analysis (EDA) - AmeriCorps"
+author: "GWU Intro to Data Science -- DATS 6101 Group8"
+# date: "today"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: show
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+```{r init, include=F}
+# The package "ezids" (EZ Intro to Data Science) includes a lot of the helper functions we developed for the course. 
+# Some of the frequently used functions are loadPkg(), xkabledply(), xkablesummary(), uzscale(), etc.
+# Once installed, load the library.
+library(ezids)
+```
+
+
+```{r setup, include=FALSE}
+# some of common options (and the defaults) are: 
+# include=T, eval=T, echo=T, results='hide'/'asis'/'markup',..., collapse=F, warning=T, message=T, error=T, cache=T, fig.width=6, fig.height=4, fig.dim=c(6,4) #inches, fig.align='left'/'center','right', 
+knitr::opts_chunk$set(warning = F, results = "markup", message = F)
+options(scientific=T, digits = 3) 
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+
+```{r}
+
+
+amco = read.csv("/Users/sayanpatra/Documents/GitHub/AmeriCorps-Volunteers/AmeriCorps_Participant_Demographics_Data.csv")
 str(amco)
 
 
@@ -298,3 +337,35 @@ mean_race_state <- state %>%
   summarise (mean_dem_group = mean(count_dem_group))
 print(race_state)
 
+# Create a contingency table of program office by demographic group
+chi_table <- table(amco_race_2022$program_office, amco_race_2022$dem_group)
+
+# Perform Chi-Square Test
+chi_test <- chisq.test(chi_table)
+print(chi_test)
+
+
+# ANOVA for MSY differences by state
+anova_state <- aov(count_dem_group ~ state + dem_group, data = amco_race_2022)
+summary(anova_state)
+#ANOVA for MSY (Member Service Year) Differences by State:
+#The ANOVA test for differences in MSY by state and demographic group reveals that both state and dem_group have statistically significant impacts on the MSY, with p-values below 0.001 for both factors. This means that both the state and demographic group significantly influence MSY counts, with notable differences in MSY allocation across states and among demographic groups.
+
+
+# ANOVA for MSY differences by region
+anova_region <- aov(count_dem_group ~ service_region + dem_group, data = amco_race_2022)
+summary(anova_region)
+#The ANOVA test by service region and demographic group also shows that service_region and dem_group have significant effects on MSY (p-values < 0.001), suggesting notable MSY differences by region and demographic group.
+
+# Tukey's HSD for post-hoc analysis if significant differences are found
+tukey_state <- TukeyHSD(anova_state)
+print(tukey_state)
+#The Tukey's HSD post-hoc test for states highlights specific pairwise comparisons, showing that states differ significantly from each other in their MSY counts for certain pairings, though some states (e.g., California and Texas with Alabama) do not show significant differences, indicating variations in distribution or concentration of MSY across regions.
+tukey_region <- TukeyHSD(anova_region)
+print(tukey_region)
+#Tukey's HSD for Demographic Groups:
+#The Tukey's HSD test on demographic groups shows significant differences in MSY counts, especially between White and other racial groups. For example, the comparison between White and American Indian or Alaska Native is highly significant, with a large mean difference in MSY allocation. This highlights disparities in MSY allocation across demographic groups, with the White group typically receiving higher MSY counts than most other groups, while groups like Asian or Asian American, Black or African American, and Racially Diverse show varying levels of significance in differences among them.
+#Overall Summary
+#The results across all tests indicate significant disparities in MSY distribution by both state, service region, and demographic group. The ANOVA tests show significant impacts of these variables on MSY allocation, with specific states and regions differing markedly from others, especially the Mid-Atlantic region. Furthermore, demographic groups such as White have consistently higher MSY allocations compared to other groups. This highlights a need for examining allocation strategies to potentially address the disparities observed in MSY distribution across different states, regions, and demographic groups.
+
+```
