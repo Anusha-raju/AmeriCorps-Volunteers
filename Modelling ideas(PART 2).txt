@@ -1,0 +1,12 @@
+Determine factors influencing whether a program is likely to have a high number of volunteers
+>can use race, participation based on population representation
+
+Factors influencing whether a state is likely to have more or less diversity in volunteers
+>population size, census breakdown for race in the state or region
+
+Factors influencing whether a program is likely to have more or less diversity in volunteers
+>state/region, number of volunteers, race breakdown of volunteers and relative to census
+
+All lend themselves to Linear Regression/or Logistic Regression to include interaction effects
+>>Can incorporate socioeconomic status since we have that data
+Rachel
