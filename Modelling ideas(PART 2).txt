@@ -20,7 +20,10 @@ Effect of being a senior citizen on volunteering. Effect of socioeconomic status
 
 Aidan
 
+-------
+The idea about using regression (both linear and logistic) to access the likelyhood of having a high number of volunteers based on race, dem_group_population etc..., seems to end up giving us just a intercept only/null model rather than an regression equation since all these are categorical variable. Even the dem_group population count acts as a categorical variable, as the population census for a group remains the same in 2022.
 
 
+Anusha
 
 
