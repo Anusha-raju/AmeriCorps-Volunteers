@@ -139,7 +139,7 @@ americorps_region <- americorps_subset %>%
 
 
 
-## Important note regarding the dataset
+## Limitations of the dataset
 
 * Member population data is collected at the individual level for AmeriCorps programs, but AmeriCorps Seniors population data is not. Instead, AmeriCorps Seniors volunteer data is reported by sponsors. Differences exist in the service time allotments assigned to difference demographic groups. 
 
