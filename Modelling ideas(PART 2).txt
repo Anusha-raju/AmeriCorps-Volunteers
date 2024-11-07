@@ -9,6 +9,7 @@ Factors influencing whether a program is likely to have more or less diversity i
 
 All lend themselves to Linear Regression/or Logistic Regression to include interaction effects
 >>Can incorporate socioeconomic status since we have that data
+
 Rachel
 
 We could make a logistic regression to see if a program is likely to have a high number of volunteers based on race, socioeconomic status, and maybe one other category
@@ -18,7 +19,6 @@ We could also see if minorities were more likely to work in certain programs or 
 Effect of being a senior citizen on volunteering. Effect of socioeconomic status on volunteering. 
 
 Aidan
-
 
 
 
