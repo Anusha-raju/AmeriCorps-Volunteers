@@ -26,4 +26,27 @@ The idea about using regression (both linear and logistic) to access the likelyh
 
 Anusha
 
+___
+New dataset proposal:
+
+Capital Bikeshare data https://capitalbikeshare.com/system-data
+Single month (ie Oct-Nov 2024) has >725K observations... There are many months to choose from
+
+EDA: 
+Freq of Electric bike vs Classic bike rental
+Avg duration of ride on E bike vs classic bike (will need to calculate duration from date time provided, probably need to disaggregate date and time into different columns)
+Avg distance of ride on e bike vs classic bike (will need to calculate distance from lat/long provided
+Freq of different users : Member vs Casual
+Any neighborhoods more likely to be start/end (match lat/long to neighborhoods)
+
+Correlations:
+Time of day and type of member (People commuting vs tourists?)
+Duration of ride and type of member
+Type of bike and type of member
+Location and type of member
+
+Models:
+Predict whether the user is a type of member based on above factors (Time of day, duration of ride, type of bike, Location rode to or from)
+
+Rachel
 
