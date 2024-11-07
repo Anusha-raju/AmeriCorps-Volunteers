@@ -50,3 +50,26 @@ Predict whether the user is a type of member based on above factors (Time of day
 
 Rachel
 
+
+
+
+
+----------
+New Topic: What factors lead to customer satisfaction for an Airline?
+
+Dataset:
+Airline Passenger Satisfaction - https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction
+
+EDA:
+Is there a difference in satisfaction based on gender?
+Is age and customer type related to satisfaction levels?
+How does the class of service (e.g., Business, Eco, etc..) affect satisfaction?
+Is there a relationship between Type of Travel (Business vs Personal) and satisfaction?
+Does flight distance influence passenger satisfaction?
+Which services have the highest and lowest satisfaction ratings?
+How do delays (Departure and Arrival Delay in Minutes) affect satisfaction?
+
+Model: Which features have the most predictive power for satisfaction?
+
+Anusha
+
